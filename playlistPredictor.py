@@ -43,10 +43,10 @@ from spotipy.oauth2 import SpotifyOAuth
 
 #export SPOTIPY_CLIENT_ID='ba503ee919b241a19afb3a14415d3095'
 #export SPOTIPY_CLIENT_SECRET='f628162109f840269d9bf8197f8f31cd'
-
-
+client_id="ba503ee919b241a19afb3a14415d3095"
+client_secret="f628162109f840269d9bf8197f8f31cd"
 #sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
-sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id="ba503ee919b241a19afb3a14415d3095", client_secret="f628162109f840269d9bf8197f8f31cd"))
+sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id, client_secret))
 
 #client_id=os.environ["SPOTIFY_CLIENT_ID"],client_secret=os.environ["SPOTIFY_CLIENT_SECRET"]
 
@@ -138,4 +138,26 @@ def recommend_songs( song_list, spotify_data, n_songs=12):
     rec_songs = rec_songs[~rec_songs['name'].isin(song_dict['name'])]
     return rec_songs[metadata_cols].to_dict(orient='records')
 
+
+import json
+import time
+from spotify_client_credentials import *
+
+client_credentials_manager = SpotifyClientCredentials(client_id,client_secret)
+sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+
+
+def get_track_ids(playlist_id):
+    music_id_list = []
+    playlist = sp.playlist(playlist_id)
+    for item in playlist['tracks']['items']:
+        music_track = item['track']
+        music_id_list.append(music_track['id'])
+    return music_id_list
+
+def get_track_data(track_id):
+    meta = sp.track(track_id)
+    track_details = {"name":meta['name'],"album":meta['album']['name'],"artist":meta['album']['artists'][0]['name'],
+                     "release_data":meta['album']['release_date'], "duration_in_mins":round((meta['duration_ms']*.001)/60,2)}
+    return track_details
 
