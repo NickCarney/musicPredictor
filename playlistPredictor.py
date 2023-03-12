@@ -44,7 +44,10 @@ from spotipy.oauth2 import SpotifyOAuth
 #export SPOTIPY_CLIENT_ID='ba503ee919b241a19afb3a14415d3095'
 #export SPOTIPY_CLIENT_SECRET='f628162109f840269d9bf8197f8f31cd'
 client_id="ba503ee919b241a19afb3a14415d3095"
-client_secret="f628162109f840269d9bf8197f8f31cd"
+client_secret="secret"
+
+#fr#258cdcea1fd8494cb7a0105a282a3141
+
 #sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id, client_secret))
 
@@ -161,3 +164,48 @@ def get_track_data(track_id):
                      "release_data":meta['album']['release_date'], "duration_in_mins":round((meta['duration_ms']*.001)/60,2)}
     return track_details
 
+playlist_id = '5796702459ca4d40'
+track_ids = get_track_ids(playlist_id)
+
+tracks = []
+
+for i in range(len(track_ids)):
+    time.sleep(.5)
+    track = get_track_data(track_ids[i])
+    tracks.append(track)
+
+with open('spotify_data.json','w') as outfile:
+    json.dump(tracks,outfile,indent=4)
+
+f = open('spotify_data.json')
+
+data = json.load(f)
+names = []
+years = []
+count = 0
+reccomender_str = ""
+for i in data:
+    names.append(i['name'])
+    years.append(i['release_date'][:4])
+    song_dict = dict(name=i['name'],year=i['release_date'][:4])
+    #print(song_dict)
+    #print(song_dict['name'])#, song_dict)
+    recommend_songs([{'name':str(song_dict['name']),'year':int(song_dict['year'])}],spotify_data)
+    
+    
+    #print(names[count],years[count])
+#     if(count!=len(track_ids)-1):
+#         reccomender_str+="{'name':'"+names[count]+"', 'year':"+years[count]+"},"
+#     else:
+#         reccomender_str+="{'name':'"+names[count]+"', 'year':"+years[count]+"}"
+    
+    count+=1
+#print(reccomender_str)   
+    
+f.close()
+# recommend_songs([reccomender_str],  data)
+# recommend_songs([{'name': 'Dream On', 'year':1980},
+#                 {'name': 'Hotel California - 2013 Remaster', 'year': 1976},
+#                 {'name': 'Break on Through (To the Other Side)', 'year': 1967},
+#                 {'name': 'Your Time Is Gonna Come - Remaster', 'year': 1969},
+#                 {'name': 'My Type', 'year': 2014}],  data)
