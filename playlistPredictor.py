@@ -37,10 +37,8 @@ from collections import defaultdict
 from spotipy.oauth2 import SpotifyOAuth
 
 
-#export SPOTIPY_CLIENT_ID='ba503ee919b241a19afb3a14415d3095'
-#export SPOTIPY_CLIENT_SECRET='f628162109f840269d9bf8197f8f31cd'
-client_id="ba503ee919b241a19afb3a14415d3095"
-client_secret = "54015e1aedf0406f960b102633ca6809"
+client_id="your client id"
+client_secret = "your client secret"
 
 #sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id, client_secret))
@@ -192,14 +190,11 @@ recommended_songs = recommend_songs(dict_list , data, len(playlist_data))
 import spotipy.util as util
 user = '31t2mek3n4j35zwlcpdh77bgfce4'#my username
 
-#export SPOTIPY_CLIENT_ID='ba503ee919b241a19afb3a14415d3095'
-#export SPOTIPY_CLIENT_SECRET='258cdcea1fd8494cb7a0105a282a3141'
-
 scope = 'playlist-modify-public'
 token = util.prompt_for_user_token(user,
                            scope,
-                           client_id='ba503ee919b241a19afb3a14415d3095',
-                           client_secret='54015e1aedf0406f960b102633ca6809',
+                           client_id='your client id',
+                           client_secret='your client secret',
                            redirect_uri='https://example.com/callback')
 sp2 = spotipy.Spotify(auth=token)
 sp2.trace = False
